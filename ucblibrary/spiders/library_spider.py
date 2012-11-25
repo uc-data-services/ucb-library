@@ -3,10 +3,11 @@
 from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor 
-from scraper.items import MyItem ##This is the item I defined in items.py
+from ucblibrary.items import UcbLibraryItem ##This is the item I defined in items.py
 
 class MultiPagesSpider(CrawlSpider):
 	'''spiders lib hours, follows links'''
+	name = 'library'
 	domain_name = 'lib.berkeley.edu'
 	allowed_domains = ['lib.berkeley.edu']
 	start_urls = ['http://www.lib.berkeley.edu/hours',]
@@ -21,8 +22,8 @@ class MultiPagesSpider(CrawlSpider):
 		items= hxs.select('/html/body/ul')
 		scraped_items =[]
 		for item in items:
-			scraped_item = MyItem() ### this is the item object you defined in the items file
-			scraped_item["title"] = item.select('li/text()').extract() ### assuming your item object has “title” field
+			scraped_item = UcbLibraryItem() ### this is the item object you defined in the items file
+			scraped_item["name"] = item.select('li/text()').extract() ### assuming your item object has “title” field
 			scraped_items.append(scraped_item)
 		return(items)
 
