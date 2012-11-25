@@ -5,7 +5,13 @@
 
 from scrapy.item import Item, Field
 
-class UcblibraryItem(Item):
+class UcbLibraryItem(Item):
     # define the fields for your item here like:
-    # name = Field()
-    pass
+    name = Field()
+    url = Field()
+    desc = Field()
+    image = Field()
+    address = Field()
+    telephone = Field()
+    branchOf = Field()
+
