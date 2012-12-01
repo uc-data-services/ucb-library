@@ -26,6 +26,7 @@ class LibrarySpider(BaseSpider):
 		scraped_item = UcbLibraryItem()
 		scraped_item['name'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
 		scraped_item['url'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a/@href[1]').extract()
+		scraped_item[''] =
 		scraped_items.append(scraped_item)
 		# for item in items:
 		# 	scraped_item = UcbLibraryItem() ### this is the item object you defined in the items file
