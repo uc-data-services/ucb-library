@@ -9,6 +9,7 @@ class UcbLibraryItem(Item):
     # define the fields for your item here like:
     name = Field()
     url = Field()
+    library_id = Field()
     desc = Field()
     image = Field()
     address = Field()

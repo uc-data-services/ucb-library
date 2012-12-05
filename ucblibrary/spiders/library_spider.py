@@ -19,15 +19,25 @@ class LibrarySpider(BaseSpider):
 #html/body/table/tbody/tr/td[1]/table/tbody/tr[1]/td/table/tbody/tr/td[2]
 #html/body/table/tr/td[1]/table/tr[2]/td/p[2]
 
+#to get calendar title 'antro library'
+#/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/h1
+#to get month date
+#/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/table/thead/tr[1]/td/span[3]/h1
+#
+
 	def parse(self, response):  #remember to rename when using multipage spider b/c name errors
 		hxs = HtmlXPathSelector(response)
-		#items = hxs.select('/html/body/table/tbody/tr/td[1]/table//tr')
+		hours = hxs.select('/html/body/table/tbody/tr/td[1]/table//tr')
 		scraped_items = []
 		scraped_item = UcbLibraryItem()
-		scraped_item['name'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
-		scraped_item['url'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a/@href[1]').extract()
-		scraped_item[''] =
+		#scraped_item['name'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
+		#scraped_item['url'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a/@href[1]').extract()
+		scraped_item['library_id'] = request.url.split('=')[2] #picking out the library id fromt the url
 		scraped_items.append(scraped_item)
+		day=hxs.select('//table[@class="cal"]//td[@class="calendar_numeral"]/h1/text()').extract()
+		hours = hxs.select('//table[@class="cal"]//td[@class="calendar_description"]//h6/self::*').re(r'<h6>\n\n\s*(.*)\n\n</h6>')
+		hours = [x.replace('<br>',' ') for x in hours]
+		day_hours = dict(zip(day,hours))
 		# for item in items:
 		# 	scraped_item = UcbLibraryItem() ### this is the item object you defined in the items file
 		# 	#hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
