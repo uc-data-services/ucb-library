@@ -32,9 +32,11 @@ class LibrarySpider(BaseSpider):
 		scraped_item = UcbLibraryItem()
 		#scraped_item['name'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
 		#scraped_item['url'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a/@href[1]').extract()
-		scraped_item['library_id'] = request.url.split('=')[2] #picking out the library id fromt the url
+		scraped_item['library_id'] = response.url.split('=')[2] #picking out the library id fromt the url
+		scraped_item['name'] = hxs.select('//td[@valign="top"]/h1/text()').extract()[0]
 		scraped_items.append(scraped_item)
 		day=hxs.select('//table[@class="cal"]//td[@class="calendar_numeral"]/h1/text()').extract()
+		day = [int(x) for x in day]
 		hours = hxs.select('//table[@class="cal"]//td[@class="calendar_description"]//h6/self::*').re(r'<h6>\n\n\s*(.*)\n\n</h6>')
 		hours = [x.replace('<br>',' ') for x in hours]
 		day_hours = dict(zip(day,hours))
