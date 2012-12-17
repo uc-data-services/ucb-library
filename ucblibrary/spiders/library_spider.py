@@ -24,6 +24,7 @@ class LibrarySpider(BaseSpider):
 #/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/h1
 #to get month date
 #/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/table/thead/tr[1]/td/span[3]/h1
+<<<<<<< HEAD
 
     def parse(self, response):   # remember to rename when using multipage spider b/c name errors
         hxs = HtmlXPathSelector(response)
@@ -47,3 +48,31 @@ class LibrarySpider(BaseSpider):
         return(scraped_items)
 
 spider = LibrarySpider()  # spider = MultiPagesSpider()
+=======
+#
+
+	def parse(self, response):  #remember to rename when using multipage spider b/c name errors
+		hxs = HtmlXPathSelector(response)
+		hours = hxs.select('/html/body/table/tbody/tr/td[1]/table//tr')
+		scraped_items = []
+		scraped_item = UcbLibraryItem()
+		#scraped_item['name'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
+		#scraped_item['url'] = hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a/@href[1]').extract()
+		scraped_item['library_id'] = response.url.split('=')[2] #picking out the library id fromt the url
+		scraped_item['name'] = hxs.select('//td[@valign="top"]/h1/text()').extract()[0]
+		scraped_items.append(scraped_item)
+		day=hxs.select('//table[@class="cal"]//td[@class="calendar_numeral"]/h1/text()').extract()
+		day = [int(x) for x in day]
+		hours = hxs.select('//table[@class="cal"]//td[@class="calendar_description"]//h6/self::*').re(r'<h6>\n\n\s*(.*)\n\n</h6>')
+		hours = [x.replace('<br>',' ') for x in hours]
+		day_hours = dict(zip(day,hours))
+		# for item in items:
+		# 	scraped_item = UcbLibraryItem() ### this is the item object you defined in the items file
+		# 	#hxs.select('/html/body/table/tr/td[1]/table//tr[1]/td[2]/p[1]/a[@href][1]/text()').extract()
+		# 	scraped_item["name"] = item.select('td[2]/p[1]/a[@href][1]/text()').extract() ### assuming your item object has “title” field
+		# 	scraped_items.append(scraped_item)
+		return(scraped_items)
+
+spider = LibrarySpider()
+#spider = MultiPagesSpider()
+>>>>>>> d79b2dbc998124280fe08a56a07fd3fe8e0dddb2
